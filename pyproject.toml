@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dpm-teach"
+version = "0.0.1"
+description = "Tutorial notebooks for Digital Rock Physics. To be used with Digital Porous Media Portal"
+authors = [
+  { name="Bernard Chang", email="bcchang@utexas.edu" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.9"
+
+dependencies = [
+    "numpy",
+    "matplotlib"
+    "scikit-img"
+    "plotly"
+    "requests",
+    "tifffile",
+    "dpm-tools"
+]
+
+[project.optional-dependencies]
+chapter1 = [medpy]
+chapter2 = []
+chapter3 = []
+chapter4 = []
+chapter5 = []
+chapter6 = ["torch"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["utils"]
