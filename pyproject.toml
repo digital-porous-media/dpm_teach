@@ -20,15 +20,16 @@ dependencies = [
     "plotly"
     "requests",
     "tifffile",
+    "pandas",
     "dpm-tools"
 ]
 
 [project.optional-dependencies]
 chapter1 = [medpy]
-chapter2 = []
-chapter3 = []
-chapter4 = []
-chapter5 = []
+chapter2 = [medpy]
+chapter3 = [pyvista[all], porespy, trimesh, cc3d]
+chapter4 = [pyvista[all]]
+chapter5 = [openpnm, porespy]
 chapter6 = ["torch"]
 
 [tool.setuptools.packages.find]
