@@ -1,0 +1,169 @@
+{
+  "beadpack": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Adrian Sheppard",
+    "description": "Packing of silica spheres",
+    "segmented": true,
+    "doi": "https://www.doi.org/10.17612/P7059V",
+    "original_dataset": "DPMP-16",
+    "comments": "Inverted phases and converted from ubc to tiff."
+  },
+  "castlegate": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Adrian Sheppard",
+    "description": "Castlegate outcrop sandstone",
+    "segmented": true,
+    "doi": "https://www.doi.org/10.17612/P7059V",
+    "original_dataset": "DPMP-16",
+    "comments": "Inverted phases and converted from ubc to tiff."
+  },
+  "sandpack": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Adrian Sheppard",
+    "description": "Poorly sorted unconsolidated fluvial sandpack",
+    "segmented": true,
+    "doi": "https://www.doi.org/10.17612/P7059V",
+    "original_dataset": "DPMP-16",
+    "comments": "Inverted phases and converted from ubc to tiff."
+  },
+  "mtgambier": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Adrian Sheppard",
+    "description": "Fossiliferous outcrop Mt. Gambier limestone",
+    "segmented": true,
+    "doi": "https://www.doi.org/10.17612/P7059V",
+    "original_dataset": "DPMP-16",
+    "comments": "Inverted phases and converted from ubc to tiff."
+  },
+  "synthetic_vugs": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Hasan J. Khan",
+    "description": "Particulate straining in serial vuggy configuration",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/RJ9P-9438",
+    "original_dataset": "DPMP-214",
+    "comments": "Converted from raw to tiff."
+  },
+  "sandstone_2d_high_res": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Ying Da Wang",
+    "description": "Example high resolution sandstone image from a super resolution validation set",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/P7D38H",
+    "original_dataset": "DPMP-211",
+    "comments": null
+  },
+  "sandstone_2d_low_res": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Ying Da Wang",
+    "description": "Example low resolution sandstone image from a super resolution validation set",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/P7D38H",
+    "original_dataset": "DPMP-211",
+    "comments": null
+  },
+  "estaillades": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Tom Bultreys",
+    "description": "Estaillades carbonate",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/P7C09J",
+    "original_dataset": "DPMP-58",
+    "comments": null
+  },
+  "rice": {
+    "url": "https://www.mathworks.com/help/examples/images/win64/NonuniformIlluminationExample_01.png",
+    "author": "MathWorks",
+    "description": "Rice with nonuniform illumination",
+    "segmented": false,
+    "doi": null,
+    "original_dataset": "https://www.mathworks.com/help/images/correcting-nonuniform-illumination.html",
+    "comments": null
+  },
+  "quartz": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Ian Molnar",
+    "description": "Silver nanoparticle injection in uniform sandy quartz",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/P7Z59J",
+    "original_dataset": "DPMP-44",
+    "comments": "Converted from raw to tiff."
+  },
+  "ketton_original": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Kamaljit Singh",
+    "description": "Trapped oil in Ketton limestone",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/P7D95F",
+    "original_dataset": "DPMP-125",
+    "comments": "Converted from raw to tiff."
+  },
+  "ketton_filtered": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Kamaljit Singh",
+    "description": "Trapped oil in Ketton limestone, filtered",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/P7D95F",
+    "original_dataset": "DPMP-125",
+    "comments": "Converted from raw to tiff."
+  },
+  "velocity_x": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Mathieu Souzy",
+    "description": "Velocity in x-direction through a bead pack",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/HDP8-0149",
+    "original_dataset": "DPMP-175",
+    "comments": "Converted from raw to tiff."
+  },
+  "velocity_y": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Mathieu Souzy",
+    "description": "Velocity in y-direction through a bead pack",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/HDP8-0149",
+    "original_dataset": "DPMP-175",
+    "comments": "Converted from raw to tiff."
+  }, 
+  "velocity_z": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Mathieu Souzy",
+    "description": "Velocity in z-direction through a bead pack",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/HDP8-0149",
+    "original_dataset": "DPMP-175",
+    "comments": "Converted from raw to tiff."
+  },
+  "bentheimer": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "Mohammad Javad Shojaei",
+    "description": "Velocity in z-direction through a bead pack",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/G6H1-4J16",
+    "original_dataset": "DPMP-47",
+    "comments": null
+  },
+  "beads_dry": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "",
+    "description": "",
+    "segmented": true,
+    "doi": "",
+    "original_dataset": "",
+    "comments": null
+  },
+  "beads_dry": {
+    "url": "https://example.com/dataset/placeholder",
+    "author": "",
+    "description": "",
+    "segmented": false,
+    "doi": "https://www.doi.org/10.17612/G6H1-4J16",
+    "original_dataset": "",
+    "comments": null
+  },
+
+
+
+  
+  
+}
