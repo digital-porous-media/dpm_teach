@@ -6,7 +6,7 @@ import requests
 import matplotlib.pyplot as plt
 
 class DPMDataloader:
-    def __init__(self, registry_path: str = "utils/registry.json", cache_dir: str = "./dpm_cache"):
+    def __init__(self, registry_path: str = "../utils/registry.json", cache_dir: str = "./dpm_cache"):
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
 
@@ -36,16 +36,15 @@ class DPMDataloader:
         img = tiff.imread(sample_path)
         return img
 
-    def list_registry(self):
-        return list(self.registry.keys())
-    
-    def crop_sample(self, sample, )
+def load_sample(sample_name: str, **kwargs):
+    dataloader = DPMDataloader(**kwargs)
+    return dataloader.get_sample(sample_name)
 
-if __name__ == "__main__":
-    dataloader = DPMDataloader()
-    print(dataloader.list_registry())
-    sample_name = "austin_chalk"
-    sample = dataloader[sample_name]
-    print(f"Shape of {sample_name} image: {sample.shape}")
-    plt.imshow(sample)
-    plt.show()
+
+# if __name__ == "__main__":
+#     dataloader = DPMDataloader()
+#     sample_name = "sandpack"
+#     sample = dataloader.get_sample("sample_name")
+#     print(f"Shape of {sample_name} image: {sample.shape}")
+#     plt.imshow(sample)
+#     plt.show()
