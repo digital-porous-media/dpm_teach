@@ -1,15 +1,12 @@
 import numpy as np
 from typing import Optional, List, Tuple
-
 class LBM_SCMP:
     """
     Single-Component Multi-Phase Lattice Boltzmann Method using Shan-Chen Model
     """
-    
-    def __init__(self, nx: int, ny: int, omega: float=1.0, cs2: float=1.0/3.0, G: float=-4.0, rho_0: float=1.0) -> None:
+    def __init__(self, nx: int, ny: int, omega: float = 1.0, cs2: float = 1.0 / 3.0, G: float = -4.0, rho_0: float = 1.0, G_ads: float = -0.4) -> None:
         """
         Initialize SCMP
-
         Parameters:
         ---
         nx, ny : int
@@ -22,139 +19,121 @@ class LBM_SCMP:
             Shan-Chen Interaction strength. Default = -4.0
             Note: Negative values are used for the phase separation.
         rho_0: float
-            Reference density for pseudopotential function. Default = 1.0        
+            Reference density for pseudopotential function. Default = 1.0
+        G_ads: float
+            Fluid-solid interaction strength. Default = -0.4
         """
-        
         self.nx = nx
         self.ny = ny
         self.omega = omega
         self.cs2 = cs2
         self.G = G
+        self.G_ads = G_ads
         self.tau = 1.0 / omega
-        
         self.c = np.array([
             [0, 0],
             [1, 0], [0, 1], [-1, 0], [0, -1],
-            [1, 1], [-1, 1], [-1, -1], [1, -1]], dtype=np.int8)
-
+            [1, 1], [-1, 1], [-1, -1], [1, -1]], dtype=np.int16)
         self.weights = np.array(
-            [4./9., 
-             1./9., 1./9., 1./9., 1./9., 
-             1./36., 1./36., 1./36., 1./36.], dtype=np.float64)
-        
+            [4. / 9.,
+             1. / 9., 1. / 9., 1. / 9., 1. / 9.,
+             1. / 36., 1. / 36., 1. / 36., 1. / 36.], dtype=np.float64)
         self.opposite = np.array(
             [0,
-            3, 4, 1, 2, 
-            7, 8, 5, 6], dtype=np.uint8)
-        
+             3, 4, 1, 2,
+             7, 8, 5, 6], dtype=np.uint8)
         # Fields
         self.rho = np.ones((nx, ny), dtype=np.float64)
+        self.rho_0 = rho_0
         self.u = np.zeros((2, nx, ny), dtype=np.float64)
         self.f = np.zeros((9, nx, ny), dtype=np.float64)
         self.f_eq = np.zeros((9, nx, ny), dtype=np.float64)
         self.psi = np.empty((nx, ny), dtype=np.float64)
-        self.rho_init = rho_0
-        
+        self.psi_s = 2  # self.rho_0 * (1 - np.exp(-1.))
+
         self.timestep = 0
-        
         self.solid_mask = np.zeros((nx, ny), dtype=bool)
-        
         self.max_velocity = 0.1  # Limit velocity for stability
-        self.rho_min_threshold = 0.01  # Minimum density threshold
-        
+        self.rho_min_threshold = 1.e-6  # Minimum density threshold
         # print(f"SCMP LBM initialized: {nx}×{ny}")
         # print(f"  omega={omega}, tau={self.tau}, cs²={cs2}, G={G}")
-        
-    def initialize_density_field(self, rho_init: np.ndarray, u_init: Optional[np.ndarray]=None) -> None:
+
+    def initialize_density_field(self, rho_init: np.ndarray, u_init: Optional[np.ndarray] = None) -> None:
         """
         Initialize simulation from arbitrary density field
-        
         Parameters:
         ---
         rho_init: ndarray (nx, ny)
             Initial density field
         u_init: ndarray (2, nx, ny), optional
             Initial velocity field. Defaults to zero everywhere
-            
         Returns:
         ---
         None
         """
-        
         if rho_init.shape != (self.nx, self.ny):
             raise ValueError(f"rho_init has shape {rho_init.shape}, which does not match grid shape ({self.nx}, {self.ny})")
         self.rho = rho_init.copy().astype(np.float64)
-        
         if u_init is None:
             self.u = np.zeros((2, self.nx, self.ny), dtype=np.float64)
         else:
             if u_init.shape != (2, self.nx, self.ny):
                 raise ValueError(f"u_init has shape {u_init.shape}, which does not match expected (2, {self.nx}, {self.ny})")
             self.u = u_init.copy().astype(np.float64)
-            
         # Initialize equilibrium distribution
         self.f_eq = self.compute_equilibrium(self.rho, self.u)
         self.f = self.f_eq.copy()
-    
         # print(f"Initialized from density array")
         # print(f"  ρ range: [{self.rho.min():.4f}, {self.rho.max():.4f}]")
         # print(f"  ρ mean: {self.rho.mean():.4f}")
-    
+
     def set_solids_from_mask(self, solid_mask: np.ndarray) -> None:
         """
         Set solid nodes from a boolean mask
-        
         Parameters:
         ---
-        solid_mask: ndarray (nx, ny) 
+        solid_mask: ndarray (nx, ny)
             Boolean array where True indicates solid nodes
-            
         Returns:
         ---
         None
         """
-        
         if solid_mask.shape != (self.nx, self.ny):
             raise ValueError(f"solid_mask has shape {solid_mask.shape}, which does not match grid shape ({self.nx}, {self.ny})")
-        
         self.solid_mask = solid_mask.copy()
-    
+        # self.f_eq[:, self.solid_mask] = 0
+        self.f[:, self.solid_mask] = 0
+        self.u[:, self.solid_mask] = 0
+
     def compute_equilibrium(self, rho: np.ndarray, u: np.ndarray) -> np.ndarray:
         """
         Compute equilibrium distribution function
-        
         Parameters:
         ---
         rho: ndarray (nx, ny)
             Density field
         u: ndarray (2, nx, ny)
             Velocity field
-        
         Returns:
         ---
         f_eq: ndarray (9, nx, ny)
             Equilibrium distribution
         """
-        
         f_eq = np.zeros((9, self.nx, self.ny))
         u_sq = u[0]**2 + u[1]**2
-        
         for i in range(9):
-            u_dot_c = self.c[i, 0] * u[0] + self.c[i, 1] * u[1] #np.dot(u, self.c[i])
+            u_dot_c = self.c[i, 0] * u[0] + self.c[i, 1] * u[1]
             f_eq[i] = self.weights[i] * rho * (1 + u_dot_c / self.cs2 + (u_dot_c**2) / (2 * self.cs2**2) - u_sq / (2 * self.cs2))
-        
+        f_eq[:, self.solid_mask] = 0.0
         return f_eq
-    
 
     def compute_macroscopic(self, f: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Compute macroscopic density and velocity from distribution function
-        
         Parameters:
         ---
         f: ndarray (9, nx, ny)
             Distribution function
-            
         Returns:
         ---
         rho: ndarray (nx, ny)
@@ -162,150 +141,227 @@ class LBM_SCMP:
         u: ndarray (2, nx, ny)
             Velocity field
         """
-        
         rho = np.sum(f, axis=0)
         rho = np.clip(rho, self.rho_min_threshold, None)
-        
         u = np.zeros((2, self.nx, self.ny), dtype=np.float64)
-        
         for i in range(9):
             u[0] += f[i] * self.c[i, 0]
             u[1] += f[i] * self.c[i, 1]
-        
-        u /= np.maximum(rho, 1e-16)
-        
-        # Clamp velocity
-        # u_mag = np.sqrt(u[0]**2 + u[1]**2)
-        # mask = u_mag > self.max_velocity
-        # if np.any(mask):
-        #     scale = self.max_velocity / (u_mag[mask] + 1e-16)
-        #     u[0][mask] *= scale
-        #     u[1][mask] *= scale
-        
+        u /= np.maximum(rho, 1e-9)
+
         return rho, u
-    
+
     def compute_pseudopotential(self, rho: np.ndarray) -> None:
         """
         Compute pseudopotential function psi(rho)
-        
         Parameters:
         ---
         rho: ndarray (nx, ny)
             Density field
-            
         Returns:
         ---
         psi: ndarray (nx, ny)
             Pseudopotential field
         """
-        psi = self.rho_init * (1 - np.exp(-rho / self.rho_init))
-        # psi = self.psi_init * np.exp(-self.rho_init / np.maximum(rho, 1e-16))
+        psi = self.rho_0 * (1 - np.exp(-rho / self.rho_0))
+        psi[self.solid_mask] = 0.0
+        # self.psi_init = 1
+        # psi = self.psi_init * np.exp(-self.rho_0 / np.maximum(rho, 1e-9))
         # psi = rho.copy() #1.0 - np.exp(-rho)
         return psi
-    
+
     def compute_shan_chen_force(self) -> np.ndarray:
         """
         Compute Shan-Chen intermolecular force. This force drives phase separation when G < 0.
-        
         Returns:
         ---
         F : ndarray (2, nx, ny)
             Force field [Fx, Fy]
         """
-        
         F = np.zeros((2, self.nx, self.ny), dtype=np.float64)
-        
-        # Sum over all lattice directions
+        psi = self.compute_pseudopotential(self.rho)
+
+        # Add ghost cells
+        if self.solid_mask is not None and self.solid_mask.any():
+            solid_padded = np.pad(self.solid_mask, 1, mode='constant', constant_values=0)
+
+        F_fluid = np.zeros_like(F)
         for i in range(1, 9):
             psi_shifted = self.compute_pseudopotential(np.roll(np.roll(self.rho, -self.c[i, 0], axis=0), -self.c[i, 1], axis=1))
-            
-            F[0] += self.weights[i] * self.c[i, 0] * psi_shifted
-            F[1] += self.weights[i] * self.c[i, 1] * psi_shifted
-        
-        F *= -self.G * self.compute_pseudopotential(self.rho)
-        
-        # Clamp force magnitude for stability
+            if (self.solid_mask is not None) and self.solid_mask.any():
+                solid_nb = np.roll(np.roll(self.solid_mask, self.c[i, 0], axis=0), self.c[i, 1], axis=1)
+                # Exclude contributions where the neighbor is solid
+                psi_shifted = np.where(solid_nb, 0.0, psi_shifted)
+            # if self.solid_mask is not None:
+            #     psi_shifted[self.solid_mask] = 0
+            F_fluid[0] += self.weights[i] * self.c[i, 0] * psi_shifted
+            F_fluid[1] += self.weights[i] * self.c[i, 1] * psi_shifted
+        F_fluid *= -self.G * psi
+
+        F += F_fluid
+
+        if (self.solid_mask is not None) and self.solid_mask.any():
+
+            F_solid = np.zeros_like(F)
+
+            for i in range(1, 9):
+                cx, cy = self.c[i]
+
+                solid_nb = np.roll(np.roll(self.solid_mask, -cx, axis=0), -cy, axis=1)
+                F_solid[0] += self.weights[i] * cx * solid_nb
+                F_solid[1] += self.weights[i] * cy * solid_nb
+                # cx, cy = int(cx), int(cy)
+
+                # solid_nb = solid_padded[
+                #     1 - cx:1 - cx + self.nx,
+                #     1 - cy:1 - cy + self.ny
+                # ]
+
+                # F_solid[0] += self.weights[i] * cx * self.psi_s * solid_nb
+                # F_solid[1] += self.weights[i] * cy * self.psi_s * solid_nb
+                # solid_nb = np.roll(np.roll(self.solid_mask, self.c[i, 0], axis=0), self.c[i, 1], axis=1)
+
+                # F_solid[0] += self.weights[i] * self.c[i, 0] * solid_nb
+                # F_solid[1] += self.weights[i] * self.c[i, 1] * solid_nb
+
+            F_solid *= -self.G_ads * psi
+            F += F_solid
+
+            F[:, self.solid_mask] = 0.0
+
+        # # Clamp force magnitude for stability
         # F_mag = np.sqrt(F[0]**2 + F[1]**2)
-        # max_force = 0.1  # Limit force magnitude
+        # max_force = 1e-3  # Limit force magnitude
         # mask = F_mag > max_force
         # if np.any(mask):
-        #     scale = max_force / (F_mag[mask] + 1e-16)
+        #     scale = max_force / (F_mag[mask] + 1e-9)
         #     F[0][mask] *= scale
         #     F[1][mask] *= scale
-        
         return F
+
+    def stream_and_bounceback(self, f_post: np.ndarray) -> np.ndarray:
+        # f_post: post-collision distributions (9, nx, ny)
+        f_next = np.zeros_like(f_post)
+        solid = self.solid_mask
+        fluid = ~solid
+
+        for i in range(9):
+            # Pull scheme: source (upstream) for direction i is x - c[i]
+            src = np.roll(np.roll(f_post[i], self.c[i, 0], axis=0), self.c[i, 1], axis=1)
+
+            # Is the upstream neighbor solid?
+            upstream_solid = np.roll(np.roll(solid, self.c[i, 0], axis=0), self.c[i, 1], axis=1)
+
+            # For fluid cells:
+            # - If upstream is fluid, take src (normal streaming)
+            # - If upstream is solid, apply bounce-back: reflect local opposite
+            normal_mask = fluid & (~upstream_solid)
+            bounce_mask = fluid & upstream_solid
+
+            f_next[i][normal_mask] = src[normal_mask]
+            f_next[i][bounce_mask] = f_post[self.opposite[i]][bounce_mask]
+
+        f_next[:, self.solid_mask] = 0  # Zero out solid cells
+        return f_next
 
     def stream(self, f: np.ndarray) -> np.ndarray:
         """
         Streaming step (with periodic BCs)
-
         Parameters:
         ---
         f : ndarray (9, nx, ny)
             Distribution function
-        
         Returns:
         ---
         f_streamed : ndarray (9, nx, ny)
             Streamed distribution function
         """
-        
         f_streamed = np.zeros_like(f)
-        
         for i in range(9):
             # Roll in x and y directions
             f_streamed[i] = np.roll(f[i], self.c[i, 0], axis=0)
             f_streamed[i] = np.roll(f_streamed[i], self.c[i, 1], axis=1)
-        
         return f_streamed
-    
+
     def bounce_back(self, f: np.ndarray) -> np.ndarray:
         """
         Bounce-back boundary condition at solid nodes
-        
         Parameters:
         ---
         f : ndarray (9, nx, ny)
             Distribution function
-        
         Returns:
         ---
         f_bounced : ndarray (9, nx, ny)
             Distribution function after bounce-back
         """
         f_bounced = f.copy()
-        
-        for i in range(9):
-            f_bounced[i][self.solid_mask] = f[self.opposite[i]][self.solid_mask]
-        
+        for i in range(1, 9):
+            # solid_ahead = np.roll(np.roll(self.solid_mask, self.c[i, 0], axis=0), self.c[i, 1], axis=1)
+            f_bounced[i][self.solid_mask] = self.f[self.opposite[i]][self.solid_mask]
         return f_bounced
-    
-    def add_body_force(self, force_magnitude : float, direction : Optional[Tuple[float, float]]=(0.0, 0.0)) -> None:
+
+    def apply_wall_density_bc(self) -> None:
+        """
+        Set fictitious density on solid nodes for wall force calculation.
+        The density of a solid node is set to the density of its adjacent fluid neighbor.
+        This is a simplified approach; more complex methods exist.
+        """
+        if not np.any(self.solid_mask):
+            return
+
+        # Iterate over lattice directions
+        for i in range(1, 9):
+            # Identify fluid nodes adjacent to solids in direction 'i'
+            solid_shifted = np.roll(np.roll(self.solid_mask, self.c[i, 0], axis=0), self.c[i, 1], axis=1)
+            fluid_near_solid = ~self.solid_mask & solid_shifted
+
+            # Get the coordinates of these fluid nodes
+            fluid_x, fluid_y = np.where(fluid_near_solid)
+
+            # Get the coordinates of the corresponding solid nodes
+            solid_x = fluid_x - self.c[i, 0] - 1
+            solid_y = fluid_y - self.c[i, 1] - 1
+
+            # Assign the fluid density to the adjacent solid node
+            # This handles boundary wrapping correctly due to how np.roll works with negative indices
+            self.rho[solid_x, solid_y] = self.rho[fluid_x, fluid_y]
+
+    def add_body_force(self, force_magnitude: float, direction: Optional[Tuple[float, float]] = (0.0, 0.0)) -> None:
         """
         Apply body force
-        
         Parameters:
         ---
         force_magnitude : float
             Magnitude of the body force
         direction : tuple of float, optional
             Direction of the body force. Defaults to (1.0, 0.0)
-        
         Returns:
         ---
         None
         """
         direction = np.array(direction, dtype=np.float64)
-        direction = direction / (np.linalg.norm(direction) + 1e-16)  # Normalize direction
-        
+        direction = direction / (np.linalg.norm(direction) + 1e-9)  # Normalize direction
         self.u[0] += force_magnitude * direction[0]
         self.u[1] += force_magnitude * direction[1]
-        
-        
+
+    def limit_force_smooth(self, F, k=2.0, alpha=2.0):
+        F0 = alpha * self.cs2 * self.rho
+        mag = np.sqrt(F[0]**2 + F[1]**2)
+        scale = 1.0 / (1.0 + (mag / (F0 + 1e-12))**k)
+        F_lim = np.empty_like(F)
+        F_lim[0] = F[0] * scale
+        F_lim[1] = F[1] * scale
+        return F_lim
+
+    def _stats(self, name, arr):
+        pass
+        # print(f"{name}: min={np.nanmin(arr):.3e}, max={np.nanmax(arr):.3e}, "
+            #   f"finite={np.isfinite(arr).all()}")
+
     def step(self, apply_body_force=False, force_magnitude=0.0, force_direction=(0.0, 0.0)):
         """
         Perform one simulation step
-        
         Parameters:
         ---
         apply_body_force : bool
@@ -314,397 +370,93 @@ class LBM_SCMP:
             Magnitude of the body force
         force_direction : tuple of float, optional
             Direction of the body force. Defaults to (1.0, 0.0)
-        
         Returns:
         ---
         None
         """
-        
-
-        # 3. Macroscopic variables
+        self._stats("f (pre)", self.f)
+        # Macroscopic variables
         self.rho, u_temp = self.compute_macroscopic(self.f)
-        
-        # 5. Compute pseudopotential
+        self._stats("rho", self.rho)
+        self._stats("u_temp_mag", np.sqrt(u_temp[0]**2 + u_temp[1]**2))
+        # self.rho[self.solid_mask] = self.rho_0  # Reset solid nodes
+        # u_temp[:, self.solid_mask] = 0.0  # Reset solid nodes
+        # self.apply_wall_density_bc()
+        # Compute pseudopotential
         self.psi = self.compute_pseudopotential(self.rho)
-        
-        # 6. Compute Shan-Chen force
+        # Compute Shan-Chen force
         F = self.compute_shan_chen_force()
-        
+        # F = self.limit_force_smooth(F)
+        self._stats("|F|", np.sqrt(F[0]**2 + F[1]**2))
         # TODO: Apply body force total Force, not to velocity directly
         if apply_body_force:
             F[0] += self.rho * force_magnitude * force_direction[0]
             F[1] += self.rho * force_magnitude * force_direction[1]
             # self.add_body_force(force_magnitude, force_direction)
-            
-        # 7. Update velocity with Shan-Chen force
-        self.u = u_temp + 0.5 * F / np.maximum(self.rho, 1e-16)
-        # self.u = u_eq + self.tau * F / np.maximum(self.rho, 1e-16)
-        # # self.u += self.tau * F / np.maximum(self.rho, 1e-16)
-        # # self.u[0] += F_sc[0] / np.maximum(self.rho, 1e-16)
-        # # self.u[1] += F_sc[1] / np.maximum(self.rho, 1e-16)
-
-
-        
+        # Update velocity with Shan-Chen force
+        self.u = u_temp + 0.5 * F / np.maximum(self.rho, 1e-1)
+        # # Clamp velocity magnitude for stability
         # u_mag = np.sqrt(self.u[0]**2 + self.u[1]**2)
-        # mask = u_mag > self.max_velocity
-        # if np.any(mask):
-        #     scale = self.max_velocity / (u_mag[mask] + 1e-16)
-        #     self.u[0][mask] *= scale
-        #     self.u[1][mask] *= scale
-            
-        # if self.solid_mask is not None:
-        #     self.u[0, self.solid_mask] = 0
-        #     self.u[1, self.solid_mask] = 0
-            
+        # low_rho = self.rho < 0.1
+        # too_fast = u_mag > 0.1 * np.sqrt(self.cs2)  # 0.1 cs
 
-        
-        # 8. Collision with Guo Forcing 
+        # mask = low_rho & too_fast
+        # if np.any(mask):
+        #     scale = (0.1 * np.sqrt(self.cs2)) / (u_mag[mask] + 1e-12)
+        #     self.u[0][mask] *= scale
+        # umax = 0.1  # Mach ~ 0.1 for D2Q9 with cs^2=1/3
+        # mask = u_mag > umax
+        # if np.any(mask):
+        #     s = umax / (u_mag[mask] + 1e-12)
+        #     self.u[0][mask] *= s
+        #     self.u[1][mask] *= s
+        if (self.solid_mask is not None) and self.solid_mask.any():
+            self.u[:, self.solid_mask] = 0.0
+        self._stats("u_mag (after half-force)", np.sqrt(self.u[0]**2 + self.u[1]**2))
+        # Guo Forcing
         guo_force = np.zeros_like(self.f)
         ci = self.c[:, :, None, None]
         ui = self.u[None, :, :, :]
         Fi_vec = F[None, :, :, :]
-        
         ci_dot_u = np.sum(ci * ui, axis=1)
-        
         term2 = (ci - ui) / self.cs2 + (ci_dot_u[:, None, :, :] * ci) / (self.cs2 ** 2)
         guo_force = self.weights[:, None, None] * (1 - 0.5 * self.omega) * np.sum(term2 * Fi_vec, axis=1)
-        
-        # 7. Compute equilibrium distribution
+        guo_force[:, self.solid_mask] = 0.0
+
+        # fluid = ~self.solid_mask
+
+        # # Mass source (should be ~0)
+        # mass_src = np.sum(guo_force[:, fluid])
+
+        # # Momentum source (should match sum of F over fluid)
+        # mom_src_x = np.sum(self.c[:, 0, None, None] * guo_force)  # sum over i, x,y
+        # mom_src_y = np.sum(self.c[:, 1, None, None] * guo_force)
+
+        # Fx_sum = np.sum(F[0][fluid])
+        # Fy_sum = np.sum(F[1][fluid])
+
+        # print(f"mass_src ≈ {mass_src:.3e}")
+        # print(f"mom_src_x/Fx_sum ≈ {mom_src_x / (Fx_sum + 1e-12):.3f}")
+        # print(f"mom_src_y/Fy_sum ≈ {mom_src_y / (Fy_sum + 1e-12):.3f}")
+
+        # # Net vertical force (diagnose drift direction)
+        # Fy_net = np.sum(F[1][fluid])
+        # print(f"Fy_net over fluid ≈ {Fy_net:.3e}")
+
+        # Compute equilibrium distribution
         self.f_eq = self.compute_equilibrium(self.rho, self.u)
-        
+        if (self.solid_mask is not None) and self.solid_mask.any():
+            self.f_eq[:, self.solid_mask] = 0
+        # Collide
         f_new = self.f - self.omega * (self.f - self.f_eq) + guo_force
-        
-        # 1. Stream
-        self.f = self.stream(f_new)
-        
-        # # 2. Bounce-back at solid nodes
-        # if self.solid_mask is not None:
-        #     self.f = self.bounce_back(f_streamed)
-        # else:
-        #     self.f = f_streamed
-            
-        # self.rho, u_temp = self.compute_macroscopic(self.f)
-        # self.u = u_temp + 0.5 * F / np.maximum(self.rho, 1e-16)
-        
-        # if self.solid_mask is not None:
-        #     self.u[0, self.solid_mask] = 0
-        #     self.u[1, self.solid_mask] = 0
 
+        # Stream and Bounceback
+        self.f = self.stream_and_bounceback(f_new)
+        # f_streamed = self.stream(f_new)
+
+        # # Bounce-back at solid nodes
+        # if (self.solid_mask is not None) and self.solid_mask.any():
+        #     f_streamed = self.bounce_back(f_streamed)
+
+        # self.f = f_streamed
         self.timestep += 1
-    
-    
-    def get_velocity_magnitude(self):
-        """
-        Compute velocity magnitude field
-        
-        $$|\\mathbf{u}| = \\sqrt{u_x^2 + u_y^2}$$
-        
-        Returns:
-        --------
-        u_mag : ndarray (nx, ny)
-            Velocity magnitude at each point
-        """
-        return np.sqrt(self.u[0]**2 + self.u[1]**2)
-    
-    def get_kinetic_energy(self):
-
-        """
-        Compute total kinetic energy
-        
-        $$KE = \frac{1}{2} \\sum_{x,y} \rho(x,y) |\\mathbf{u}(x,y)|^2$$
-        
-        For phase separation: KE should decay to near zero
-        For driven flow: KE should reach steady state
-        
-        Returns:
-        --------
-        ke : float
-            Total kinetic energy (normalized by grid size)
-        """
-        u_mag_sq = self.u[0]**2 + self.u[1]**2
-        ke = np.sum(self.rho * u_mag_sq) / (self.nx * self.ny)
-        return ke
-    
-    def get_density_gradient(self):
-        """
-        Compute density gradient magnitude
-        
-        $$|\nabla \rho| = \\sqrt{\\left(\frac{\\partial \rho}{\\partial x}\right)^2 + 
-        \\left(\frac{\partial \rho}{\partial y}\right)^2}$$
-        
-        Large gradients indicate interfaces
-        
-        Returns:
-        --------
-        grad_rho : ndarray (nx, ny)
-            Magnitude of density gradient
-        """
-        drho_dx = np.gradient(self.rho, axis=0)
-        drho_dy = np.gradient(self.rho, axis=1)
-        grad_rho = np.sqrt(drho_dx**2 + drho_dy**2)
-        return grad_rho
-    
-    def get_interface_length(self, threshold=None):
-        """
-        Estimate interface length using gradient threshold
-        
-        Interfaces are where |∇ρ| exceeds threshold
-        
-        Parameters:
-        -----------
-        threshold : float, optional
-            Gradient threshold for interface detection
-            Default: 10% of max gradient
-            
-        Returns:
-        --------
-        interface_length : float
-            Number of interface pixels
-        """
-        grad_rho = self.get_density_gradient()
-        
-        if threshold is None:
-            threshold = 0.1 * np.max(grad_rho)
-        
-        interface_pixels = np.sum(grad_rho > threshold)
-        return interface_pixels
-    
-    def get_phase_volumes(self, threshold=None):
-        """
-        Estimate volume fraction of each phase
-        
-        Uses density threshold to separate liquid and gas
-        
-        Parameters:
-        -----------
-        threshold : float, optional
-            Density threshold for phase separation
-            Default: mean density
-            
-        Returns:
-        --------
-        phi_liquid : float
-            Volume fraction of high-density phase (0 to 1)
-        phi_gas : float
-            Volume fraction of low-density phase (0 to 1)
-        """
-        if threshold is None:
-            threshold = np.mean(self.rho)
-        
-        liquid_pixels = np.sum(self.rho > threshold)
-        total_pixels = self.nx * self.ny
-        
-        phi_liquid = liquid_pixels / total_pixels
-        phi_gas = 1.0 - phi_liquid
-        
-        return phi_liquid, phi_gas
-    
-    def get_density_statistics(self):
-        """
-        Compute density field statistics
-        
-        Returns:
-        --------
-        stats : dict
-            Dictionary containing:
-            - 'mean': mean density
-            - 'std': standard deviation
-            - 'min': minimum density
-            - 'max': maximum density
-            - 'range': max - min
-        """
-        stats = {
-            'mean': np.mean(self.rho),
-            'std': np.std(self.rho),
-            'min': np.min(self.rho),
-            'max': np.max(self.rho),
-            'range': np.max(self.rho) - np.min(self.rho)
-        }
-        return stats
-    
-    def measure_interfacial_tension(self, method='laplace'):
-        """
-        Measure interfacial tension from simulation
-        
-        Uses Young-Laplace equation: ΔP = γ * κ
-        where κ is interface curvature
-        
-        Parameters:
-        -----------
-        method : str
-            'laplace': Use pressure difference across curved interface
-            'gradient': Use density gradient method
-            
-        Returns:
-        --------
-        gamma : float
-            Interfacial tension (in simulation units)
-        """
-        if method == 'laplace':
-            # For flat interface, measure pressure jump
-            # This is more complex - requires interface detection
-            # Simplified: use density gradient as proxy
-            grad_rho = self.get_density_gradient()
-            
-            # Interfacial tension ~ integral of pressure tensor
-            # Simplified approximation:
-            gamma = np.max(grad_rho) * self.cs2 * abs(self.G) / 2.0
-            
-        elif method == 'gradient':
-            # Method based on density gradient
-            grad_rho = self.get_density_gradient()
-            rho_max = np.max(self.rho)
-            rho_min = np.min(self.rho)
-            
-            # Approximate surface tension from gradient
-            gamma = np.mean(grad_rho) * (rho_max - rho_min) * abs(self.G) / 4.0
-        
-        else:
-            raise ValueError(f"Unknown method: {method}")
-        
-        return gamma
-    
-    def get_pressure_field(self):
-        """
-        Compute pressure field from equation of state
-        
-        For Shan-Chen model:
-        $$P = \rho c_s^2 + \frac{G}{2} \\psi^2$$
-        
-        Returns:
-        --------
-        P : ndarray (nx, ny)
-            Pressure field
-        """
-        psi = self.compute_pseudopotential(self.rho)
-        P = self.rho * self.cs2 + 0.5 * self.G * psi**2
-        return P
-    
-    def get_pressure_jump_across_interface(self):
-        """
-        Measure pressure difference across interface
-        
-        For Young-Laplace: ΔP = γ * κ
-        
-        Returns:
-        --------
-        delta_p : float
-            Pressure difference between liquid and gas phases
-        """
-        P = self.get_pressure_field()
-        rho_threshold = np.mean(self.rho)
-        
-        P_liquid = np.mean(P[self.rho > rho_threshold])
-        P_gas = np.mean(P[self.rho <= rho_threshold])
-        
-        delta_p = P_liquid - P_gas
-        return delta_p
-    
-    def get_flow_rate(self, direction='x'):
-        """
-        Compute flow rate in specified direction
-        
-        $$Q = \\sum_{x,y} \rho(x,y) u_d(x,y)$$
-        
-        Parameters:
-        -----------
-        direction : str
-            'x' or 'y'
-            
-        Returns:
-        --------
-        flow_rate : float
-            Total flow rate
-        """
-        if direction == 'x':
-            flow_rate = np.sum(self.rho * self.u[0])
-        elif direction == 'y':
-            flow_rate = np.sum(self.rho * self.u[1])
-        else:
-            raise ValueError("direction must be 'x' or 'y'")
-        
-        return flow_rate
-    
-    def get_average_velocity(self):
-        """
-        Compute volume-averaged velocity
-        
-        $$\\langle \\mathbf{u} \rangle = \frac{1}{V} \\sum_{x,y} \\mathbf{u}(x,y)$$
-        
-        Returns:
-        --------
-        u_avg : ndarray (2,)
-            Average velocity [u_x, u_y]
-        """
-        u_avg = np.array([
-            np.mean(self.u[0]),
-            np.mean(self.u[1])
-        ])
-        return u_avg
-    
-    def get_capillary_number(self, reference_velocity=None):
-        """
-        Compute capillary number
-        
-        $$Ca = \frac{\\mu v}{\\gamma}$$
-        
-        Ratio of viscous to capillary forces
-        
-        Parameters:
-        -----------
-        reference_velocity : float, optional
-            Reference velocity for Ca calculation
-            Default: average velocity magnitude
-            
-        Returns:
-        --------
-        ca : float
-            Capillary number
-        """
-        if reference_velocity is None:
-            u_avg = self.get_average_velocity()
-            reference_velocity = np.linalg.norm(u_avg)
-        
-        # Viscosity in LBM: nu = cs^2 * (tau - 0.5)
-        nu = self.cs2 * (self.tau - 0.5)
-        
-        # Interfacial tension
-        gamma = self.measure_interfacial_tension()
-        
-        # Capillary number
-        ca = nu * reference_velocity / (gamma + 1e-16)
-        
-        return ca
-    
-    def get_reynolds_number(self, reference_velocity=None, characteristic_length=None):
-        """
-        Compute Reynolds number
-        
-        $$Re = \frac{\rho v L}{\\mu}$$
-        
-        Parameters:
-        -----------
-        reference_velocity : float, optional
-            Reference velocity. Default: average velocity magnitude
-        characteristic_length : float, optional
-            Characteristic length. Default: sqrt(nx*ny)
-            
-        Returns:
-        --------
-        re : float
-            Reynolds number
-        """
-        if reference_velocity is None:
-            u_avg = self.get_average_velocity()
-            reference_velocity = np.linalg.norm(u_avg)
-        
-        if characteristic_length is None:
-            characteristic_length = np.sqrt(self.nx * self.ny)
-        
-        # Kinematic viscosity
-        nu = self.cs2 * (self.tau - 0.5)
-        
-        # Reynolds number
-        re = reference_velocity * characteristic_length / (nu + 1e-16)
-        
-        return re

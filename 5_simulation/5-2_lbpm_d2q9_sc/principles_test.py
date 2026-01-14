@@ -42,6 +42,9 @@ def initialize_circular_bubble(nx, ny, R, rho_liq=1.6, rho_gas=0.1, center=None)
     y = np.arange(ny)[None, :]
     r = np.sqrt((x - cx)**2 + (y - cy)**2)
     rho = np.where(r <= R, rho_liq, rho_gas)
+    # rho = np.zeros((nx, ny), dtype=np.float64)
+    # rho[:nx // 2, :] = rho_gas
+    # rho[nx // 2:, :] = rho_liq
     u = np.zeros((2, nx, ny))
     return rho, u
 
@@ -67,7 +70,7 @@ def initialize_elliptical_bubble(nx, ny, rx, ry, rho_liq=1.6, rho_gas=0.1, cente
     
     # Note: The original function had rho_liq inside the bubble.
     # This implementation places rho_gas inside the bubble and rho_liq outside.
-    rho = np.where(ellipse_eq <= 1, rho_gas, rho_liq)
+    rho = np.where(ellipse_eq <= 1, rho_liq, rho_gas)
     u = np.zeros((2, nx, ny))
     return rho, u
 
@@ -166,13 +169,6 @@ if __name__ == "__main__":
     run_laplace_ift_validation(
         nx=64, ny=64,
         radius=10.,
-        omega=1, cs2=1/3, G=-4.7,
-        rho_liq=2.1, rho_gas=0.15, max_steps=10000, check_every=100
+        omega=1, cs2=1 / 3, G=-4.7,
+        rho_liq=2.5, rho_gas=0.15, max_steps=1000, check_every=100
     )
-
-
-    
-    
-    
-    
-    
