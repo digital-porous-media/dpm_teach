@@ -25,6 +25,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+all = ["medpy", "pyvista[all]", "porespy", "trimesh", "cc3d", "openpnm", "torch"]
 chapter1 = [medpy]
 chapter2 = [medpy]
 chapter3 = [pyvista[all], porespy, trimesh, cc3d]
