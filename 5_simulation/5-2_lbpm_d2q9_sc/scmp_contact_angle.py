@@ -66,13 +66,13 @@ def run_contact_angle_test(G_ads_value, max_steps=5000):
     # 1. Simulation Parameters
     nx, ny = 200, 100  # Grid dimensions
     omega = 1.0          # Relaxation time
-    G = -5.5  # Fluid-fluid interaction (for phase separation)
+    G = -5.2  # Fluid-fluid interaction (for phase separation)
 
     # 2. Define Initial and Boundary Conditions
     # Create the solid mask (a flat wall at the bottom)
     solid_mask = np.zeros((nx, ny), dtype=bool)
     solid_mask[:, 0] = True   # Wall at y=0 (bottom)
-    # solid_mask[:, -1] = True  # Wall at y=ny-1 (top)
+    # solid_mask[:, -1] = True  # Wall at y=ny-1 (top) to prevent wrapping
     # solid_mask[0, :] = True   # Wall at x=0 (left)
     # solid_mask[-1, :] = True  # Wall at x=nx-1 (right)
 
@@ -82,7 +82,7 @@ def run_contact_angle_test(G_ads_value, max_steps=5000):
     radius = 25
     y, x = np.ogrid[:ny, :nx]
     mask = (x - center_x)**2 + (y - center_y)**2 < radius**2
-    rho_init[mask.T] = 2.5  # High-density droplet
+    rho_init[mask.T] = 2.15  # High-density droplet
     # rho_init[solid_mask] = 1.0
 
     # nx, ny = 200, 100
@@ -120,10 +120,10 @@ def run_contact_angle_test(G_ads_value, max_steps=5000):
 if __name__ == "__main__":
     # --- EXPERIMENT HERE ---
     # Change the value of G_ads to see its effect on wettability.
-    # - G_ads = -0.2  (Hydrophilic / Wetting, angle < 90°)
-    # - G_ads =  0.0  (Neutral, angle ≈ 90°)
-    # - G_ads =  0.2  (Hydrophobic / Non-wetting, angle > 90°)
+    # - G_ads = -3.7  (Hydrophilic / Wetting, angle < 90°)
+    # - G_ads =  -3.2  (Neutral, angle ≈ 90°)
+    # - G_ads =  -2.0  (Hydrophobic / Non-wetting, angle > 90°)
 
-    G_ads_to_test = 0.1
+    G_ads_to_test = -6
 
     run_contact_angle_test(G_ads_value=G_ads_to_test, max_steps=1000)
