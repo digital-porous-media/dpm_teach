@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import requests
 import matplotlib.pyplot as plt
+import re
 
 class DPMDataloader:
     def __init__(self, registry_path: str = "../utils/registry.json", cache_dir: str = "./dpm_cache"):
@@ -40,11 +41,32 @@ def load_sample(sample_name: str, **kwargs):
     dataloader = DPMDataloader(**kwargs)
     return dataloader.get_sample(sample_name)
 
+def bump_registry_entry_version(entry, new_version: int = None):
+    for key in ['url', 'corral_path']:
+        original = entry.get(key)
+        # Regex to find current version number
+        match = re.search(r'(DRP-\d+v)(\d+)', original)
+        if match:
+            prefix, version = match.groups()
+            if new_version is None:
+                new_version = int(version) + 1
+            else:
+                new_version = int(new_version)
+            entry[key] = original.replace(f"{prefix}{version}", f"{prefix}{new_version}")
+    return entry
 
-# if __name__ == "__main__":
-#     dataloader = DPMDataloader()
-#     sample_name = "sandpack"
-#     sample = dataloader.get_sample("sample_name")
-#     print(f"Shape of {sample_name} image: {sample.shape}")
-#     plt.imshow(sample)
-#     plt.show()
+def bump_all_registry_versions(registry_path: str, new_version: int = None):
+    # Load the registry from file
+    with open(registry_path, "r") as f:
+        registry = json.load(f)
+
+    for sample, entry in registry.items():
+        registry[sample] = bump_registry_entry_version(entry, new_version)
+
+    with open("utils/registry.json", "w") as f:
+        json.dump(registry, f, indent=2)
+
+    return registry
+
+if __name__ == "__main__":
+    entry = bump_all_registry_versions("utils/registry.json", new_version=3)

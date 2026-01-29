@@ -1,7 +1,7 @@
 {
   "beadpack": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Beadpack/beadpack.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Beadpack/beadpack.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Beadpack/beadpack.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Beadpack/beadpack.tif",
     "author": "Adrian Sheppard",
     "description": "Packing of silica spheres",
     "segmented": true,
@@ -10,8 +10,8 @@
     "comments": "Inverted phases and converted from ubc to tiff."
   },
   "castlegate": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/Castlegate/castlegate.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/Castlegate/castlegate.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/Castlegate/castlegate.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/Castlegate/castlegate.tif",
     "author": "Adrian Sheppard",
     "description": "Castlegate outcrop sandstone",
     "segmented": true,
@@ -20,8 +20,8 @@
     "comments": "Inverted phases and converted from ubc to tiff."
   },
   "sandpack": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/Sandpack/sandpack.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/Sandpack/sandpack.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/Sandpack/sandpack.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/Sandpack/sandpack.tif",
     "author": "Adrian Sheppard",
     "description": "Poorly sorted unconsolidated fluvial sandpack",
     "segmented": true,
@@ -30,8 +30,8 @@
     "comments": "Inverted phases and converted from ubc to tiff."
   },
   "mtgambier": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Carbonates/Mt.%20Gambier/mtgambier.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Carbonates/Mt. Gambier/mtgambier.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Carbonates/Mt.%20Gambier/mtgambier.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Carbonates/Mt. Gambier/mtgambier.tif",
     "author": "Adrian Sheppard",
     "description": "Fossiliferous outcrop Mt. Gambier limestone",
     "segmented": true,
@@ -40,8 +40,8 @@
     "comments": "Inverted phases and converted from ubc to tiff."
   },
   "synthetic_vugs": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Synthetic%20Vugs/synthetic_vugs.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Synthetic Vugs/synthetic_vugs.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Synthetic%20Vugs/synthetic_vugs.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Synthetic Vugs/synthetic_vugs.tif",
     "author": "Hasan J. Khan",
     "description": "Particulate straining in serial vuggy configuration",
     "segmented": false,
@@ -50,8 +50,8 @@
     "comments": "Converted from raw to tiff."
   },
   "sandstone_2d_high_res": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/Bentheimer%20Dual%20Resolution/bentheimer_high_res.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/Bentheimer Dual Resolution/bentheimer_high_res.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/Bentheimer%20Dual%20Resolution/bentheimer_high_res.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/Bentheimer Dual Resolution/bentheimer_high_res.tif",
     "author": "Ying Da Wang",
     "description": "Example high resolution sandstone image from a super resolution validation set",
     "segmented": false,
@@ -60,8 +60,8 @@
     "comments": null
   },
   "sandstone_2d_low_res": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/Bentheimer%20Dual%20Resolution/bentheimer_low_res.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/Bentheimer Dual Resolution/bentheimer_low_res.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/Bentheimer%20Dual%20Resolution/bentheimer_low_res.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/Bentheimer Dual Resolution/bentheimer_low_res.tif",
     "author": "Ying Da Wang",
     "description": "Example low resolution sandstone image from a super resolution validation set",
     "segmented": false,
@@ -70,8 +70,8 @@
     "comments": null
   },
   "estaillades": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Carbonates/Estaillades/estaillades.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Carbonates/Estaillades/estaillades.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Carbonates/Estaillades/estaillades.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Carbonates/Estaillades/estaillades.tif",
     "author": "Tom Bultreys",
     "description": "Estaillades carbonate",
     "segmented": false,
@@ -80,8 +80,8 @@
     "comments": null
   },
   "rice": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Other/Rice/rice_uneven_illumination.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Other/Rice/rice_uneven_illumination.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Other/Rice/rice_uneven_illumination.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Other/Rice/rice_uneven_illumination.tif",
     "author": "MathWorks",
     "description": "Rice with nonuniform illumination",
     "segmented": false,
@@ -90,8 +90,8 @@
     "comments": null
   },
   "quartz": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/Uniform%20Quartz%20Grains/uniform_quartz_grains.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/Uniform Quartz Grains/uniform_quartz_grains.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/Uniform%20Quartz%20Grains/uniform_quartz_grains.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/Uniform Quartz Grains/uniform_quartz_grains.tif",
     "author": "Ian Molnar",
     "description": "Silver nanoparticle injection in uniform sandy quartz",
     "segmented": false,
@@ -100,28 +100,38 @@
     "comments": "Converted from raw to tiff."
   },
   "ketton_original": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Carbonates/Ketton%20Multiphase/ketton_original.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Carbonates/Ketton Multiphase/ketton_original.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Carbonates/Ketton%20Multiphase/ketton_original.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Carbonates/Ketton Multiphase/ketton_original.tif",
     "author": "Kamaljit Singh",
     "description": "Trapped oil in Ketton limestone",
     "segmented": false,
     "doi": "https://www.doi.org/10.17612/P7D95F",
     "original_dataset": "DPMP-125",
-    "comments": "Converted from raw to tiff."
+    "comments": "Converted from raw to tiff. From SSb in DPMP-125."
   },
   "ketton_filtered": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Carbonates/Ketton%20Multiphase/ketton_filtered.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Carbonates/Ketton Multiphase/ketton_filtered.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Carbonates/Ketton%20Multiphase/ketton_filtered.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Carbonates/Ketton Multiphase/ketton_filtered.tif",
     "author": "Kamaljit Singh",
     "description": "Trapped oil in Ketton limestone, filtered",
     "segmented": false,
     "doi": "https://www.doi.org/10.17612/P7D95F",
     "original_dataset": "DPMP-125",
-    "comments": "Converted from raw to tiff."
+    "comments": "Converted from raw to tiff. From SSb in DPMP-125."
+  },
+  "ketton_segmented": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Carbonates/Ketton%20Multiphase/ketton_segmented.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Carbonates/Ketton Multiphase/ketton_segmented.tif",
+    "author": "Kamaljit Singh",
+    "description": "Trapped oil in Ketton limestone, segmented",
+    "segmented": true,
+    "doi": "https://www.doi.org/10.17612/P7D95F",
+    "original_dataset": "DPMP-125",
+    "comments": "Converted from raw to tiff. From SSb in DPMP-125."
   },
   "velocity_x": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Velocimetry/velocity_x.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Velocimetry/velocity_x.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Velocimetry/velocity_x.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Velocimetry/velocity_x.tif",
     "author": "Mathieu Souzy",
     "description": "Velocity in x-direction through a bead pack",
     "segmented": false,
@@ -130,18 +140,18 @@
     "comments": "Converted from raw to tiff."
   },
   "velocity_y": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Velocimetry/velocity_y.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Velocimetry/velocity_y.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Velocimetry/velocity_y.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Velocimetry/velocity_y.tif",
     "author": "Mathieu Souzy",
     "description": "Velocity in y-direction through a bead pack",
     "segmented": false,
     "doi": "https://www.doi.org/10.17612/HDP8-0149",
     "original_dataset": "DPMP-175",
     "comments": "Converted from raw to tiff."
-  }, 
+  },
   "velocity_z": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Velocimetry/velocity_z.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Velocimetry/velocity_z.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Velocimetry/velocity_z.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Velocimetry/velocity_z.tif",
     "author": "Mathieu Souzy",
     "description": "Velocity in z-direction through a bead pack",
     "segmented": false,
@@ -150,8 +160,8 @@
     "comments": "Converted from raw to tiff."
   },
   "finney_pack": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Finney%20Pack/finney_pack.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Finney Pack/finney_pack.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Finney%20Pack/finney_pack.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Finney Pack/finney_pack.tif",
     "author": "John Finney",
     "description": "Finney Packing of Spheres",
     "segmented": true,
@@ -160,8 +170,8 @@
     "comments": null
   },
   "beads_dry_slice": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Dry%20Beads/beadpack_slice.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Dry Beads/beadpack_slice.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Dry%20Beads/beadpack_slice.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Dry Beads/beadpack_slice.tif",
     "author": "",
     "description": "",
     "segmented": true,
@@ -170,8 +180,8 @@
     "comments": null
   },
   "berea_200_micromodel": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/Berea%20Micromodels/berea_micromodel_200.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/Berea Micromodels/berea_micromodel_200.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/Berea%20Micromodels/berea_micromodel_200.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/Berea Micromodels/berea_micromodel_200.tif",
     "author": "",
     "description": "",
     "segmented": false,
@@ -180,8 +190,8 @@
     "comments": null
   },
   "berea_500_micromodel": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/Berea%20Micromodels/berea_micromodel_500.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/Berea Micromodels/berea_micromodel_500.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/Berea%20Micromodels/berea_micromodel_500.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/Berea Micromodels/berea_micromodel_500.tif",
     "author": "",
     "description": "",
     "segmented": false,
@@ -190,8 +200,8 @@
     "comments": null
   },
   "north_sea_sem": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/North%20Sea%20SEM/north_sea_sem.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/North Sea SEM/north_sea_sem.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/North%20Sea%20SEM/north_sea_sem.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/North Sea SEM/north_sea_sem.tif",
     "author": "Gilbert Scott",
     "description": "SEM images of samples from a UK North Sea sandstone oil reservoir.",
     "segmented": false,
@@ -200,8 +210,8 @@
     "comments": null
   },
   "miocene_thin_section": {
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Sandstones/Offshore%20Miocene%20Thin%20Section/miocene.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Sandstones/Offshore Miocene Thin Section/miocene.tif",
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Sandstones/Offshore%20Miocene%20Thin%20Section/miocene.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Sandstones/Offshore Miocene Thin Section/miocene.tif",
     "author": "Masa Prodanovic",
     "description": "Thin section from an offshore Texas miocene sandstone. A part of the Folk-McBride collection.",
     "segmented": false,
@@ -209,9 +219,9 @@
     "original_dataset": "DPMP-244",
     "comments": "null"
   },
-  "glass_bead_drainage_t1":{
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Drainage%20in%20Glass%20Beads/MD_01.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Drainage in Glass Beads/MD_01.tif",
+  "glass_bead_drainage_t1": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Drainage%20in%20Glass%20Beads/MD_01.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Drainage in Glass Beads/MD_01.tif",
     "author": "Mark Porter",
     "description": "NAPL/water/glass Bead System drainage timestep 1.",
     "segmented": true,
@@ -219,9 +229,9 @@
     "original_dataset": null,
     "comments": null
   },
-  "glass_bead_drainage_t2":{
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Drainage%20in%20Glass%20Beads/MD_02.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Drainage in Glass Beads/MD_02.tif",
+  "glass_bead_drainage_t2": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Drainage%20in%20Glass%20Beads/MD_02.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Drainage in Glass Beads/MD_02.tif",
     "author": "Mark Porter",
     "description": "NAPL/water/glass Bead System drainage timestep 2.",
     "segmented": true,
@@ -229,9 +239,9 @@
     "original_dataset": null,
     "comments": null
   },
-  "glass_bead_drainage_t5":{
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Drainage%20in%20Glass%20Beads/MD_05.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Drainage in Glass Beads/MD_05.tif",
+  "glass_bead_drainage_t5": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Drainage%20in%20Glass%20Beads/MD_05.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Drainage in Glass Beads/MD_05.tif",
     "author": "Mark Porter",
     "description": "NAPL/water/glass Bead System drainage timestep 5.",
     "segmented": true,
@@ -239,9 +249,9 @@
     "original_dataset": null,
     "comments": null
   },
-  "glass_bead_drainage_t7":{
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Drainage%20in%20Glass%20Beads/MD_07.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Drainage in Glass Beads/MD_07.tif",
+  "glass_bead_drainage_t7": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Drainage%20in%20Glass%20Beads/MD_07.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Drainage in Glass Beads/MD_07.tif",
     "author": "Mark Porter",
     "description": "NAPL/water/glass Bead System drainage timestep 7.",
     "segmented": true,
@@ -249,9 +259,9 @@
     "original_dataset": null,
     "comments": null
   },
-  "glass_bead_drainage_t9":{
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Drainage%20in%20Glass%20Beads/MD_09.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Drainage in Glass Beads/MD_09.tif",
+  "glass_bead_drainage_t9": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Drainage%20in%20Glass%20Beads/MD_09.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Drainage in Glass Beads/MD_09.tif",
     "author": "Mark Porter",
     "description": "NAPL/water/glass Bead System drainage timestep 9.",
     "segmented": true,
@@ -259,9 +269,9 @@
     "original_dataset": null,
     "comments": null
   },
-  "glass_bead_drainage_t10":{
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Drainage%20in%20Glass%20Beads/MD_10.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Drainage in Glass Beads/MD_10.tif",
+  "glass_bead_drainage_t10": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Drainage%20in%20Glass%20Beads/MD_10.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Drainage in Glass Beads/MD_10.tif",
     "author": "Mark Porter",
     "description": "NAPL/water/glass Bead System drainage timestep 10.",
     "segmented": true,
@@ -269,9 +279,9 @@
     "original_dataset": null,
     "comments": null
   },
-  "glass_bead_drainage_t11":{
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Drainage%20in%20Glass%20Beads/MD_11.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Drainage in Glass Beads/MD_11.tif",
+  "glass_bead_drainage_t11": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Drainage%20in%20Glass%20Beads/MD_11.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Drainage in Glass Beads/MD_11.tif",
     "author": "Mark Porter",
     "description": "NAPL/water/glass Bead System drainage timestep 11.",
     "segmented": true,
@@ -279,9 +289,9 @@
     "original_dataset": null,
     "comments": null
   },
-  "glass_bead_drainage_t12":{
-    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v2/Engineered/Drainage%20in%20Glass%20Beads/MD_12.tif",
-    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v2/Engineered/Drainage in Glass Beads/MD_12.tif",
+  "glass_bead_drainage_t12": {
+    "url": "https://web.corral.tacc.utexas.edu/digitalporousmedia/DRP-1112v3/Engineered/Drainage%20in%20Glass%20Beads/MD_12.tif",
+    "corral_path": "/corral-repl/utexas/OTH21076/data_prod/published/DRP-1112v3/Engineered/Drainage in Glass Beads/MD_12.tif",
     "author": "Mark Porter",
     "description": "NAPL/water/glass Bead System drainage timestep 12.",
     "segmented": true,
