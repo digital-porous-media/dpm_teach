@@ -63,7 +63,7 @@ def relax_to_equilibrium(sim, max_steps=5000, check_every=500, tol=1e-10, verbos
     """
     prev_rho = sim.rho.copy()
     for step in tqdm(range(1, max_steps + 1), desc="Relaxing to equilibrium"):
-        sim.step(apply_body_force=False)
+        sim.step()
         if step % check_every == 0:
             if has_converged(prev_rho, sim.rho, tol=tol):
                 if verbose:

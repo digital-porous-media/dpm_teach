@@ -94,7 +94,7 @@ def run_contact_angle_test(G_ads_value, max_steps=5000):
     # rho_init = make_tanh_droplet(nx, ny, center_x, center_y, R, rho_l, rho_g, W)
 
     # 3. Initialize and Run the LBM Simulation
-    lbm = LBM_SCMP(nx=nx, ny=ny, omega=omega, G=G, G_ads=G_ads_value, rho_0=1)
+    lbm = LBM_SCMP(nx=nx, ny=ny, omega=omega, G=G, G_ads=G_ads_value, rho_0=1, body_force=[1.0E-4, 0.0])
     lbm.initialize_density_field(rho_init)
     lbm.set_solids_from_mask(solid_mask)
 
@@ -126,4 +126,4 @@ if __name__ == "__main__":
 
     G_ads_to_test = -6
 
-    run_contact_angle_test(G_ads_value=G_ads_to_test, max_steps=1000)
+    run_contact_angle_test(G_ads_value=G_ads_to_test, max_steps=5000)
