@@ -220,10 +220,9 @@ class LBM_SCMP:
         fluid = ~solid
 
         for i in range(9):
-            # Pull scheme: source (upstream) for direction i is x - c[i]
             src = np.roll(np.roll(f_post[i], self.c[i, 0], axis=0), self.c[i, 1], axis=1)
 
-            # Is the upstream neighbor solid?
+            # Indicator function for upstream solid
             upstream_solid = np.roll(np.roll(solid, self.c[i, 0], axis=0), self.c[i, 1], axis=1)
 
             # For fluid cells:
@@ -235,10 +234,11 @@ class LBM_SCMP:
             f_next[i][normal_mask] = src[normal_mask]
             f_next[i][bounce_mask] = f_post[self.opposite[i]][bounce_mask]
 
+        # Zero out solids for posterity
         f_next[:, self.solid_mask] = 0  # Zero out solid cells
         return f_next
 
-    def compute_body_force(self) -> None:
+    def compute_body_force(self) -> np.ndarray:
         """
         Apply body force
         Parameters:
@@ -255,18 +255,38 @@ class LBM_SCMP:
             F[:, self.solid_mask] = 0.0
 
         return F
+    
+    def compute_guo_forcing(self, F) -> np.ndarray:
+        """
+        Compute Guo forcing
+        Parameters:
+        ---
+        F : ndarray (2, nx, ny)
+            Shan-Chen force + Body force
+        Returns:
+        ---
+        guo_force : ndarray (2, nx, ny)
+            Guo forcing term
+        """
+        
+        guo_force = np.zeros_like(self.f, dtype=np.float64)
+        ci = self.c[:, :, None, None]
+        ui = self.u[None, :, :, :]
+        Fi_vec = F[None, :, :, :]
+        ci_dot_u = np.sum(ci * ui, axis=1)
+        term2 = (ci - ui) / self.cs2 + (ci_dot_u[:, None, :, :] * ci) / (self.cs2 ** 2)
+        guo_force = self.weights[:, None, None] * (1 - 0.5 * self.omega) * np.sum(term2 * Fi_vec, axis=1)
+        return guo_force
+        
 
     def step(self, body_force_override: Iterable[float] = None):
         """
         Perform one simulation step
         Parameters:
         ---
-        apply_body_force : bool
-            Whether to apply body force
-        force_magnitude : float
-            Magnitude of the body force
-        force_direction : tuple of float, optional
-            Direction of the body force. Defaults to (1.0, 0.0)
+        body_force_override: Iterable[float], optional
+            If provided, use this body force instead of the one provided in the constructor. Should be a 2-element iterable for (Fx, Fy).
+        
         Returns:
         ---
         None
@@ -285,19 +305,13 @@ class LBM_SCMP:
         if self.body_force != (0.0, 0.0):
             F += self.compute_body_force()
 
-        # Update velocity with Shan-Chen Half-force
+        # Update velocity with half-force correction
         self.u = u_temp + 0.5 * F / np.maximum(self.rho, 1e-1)
         if (self.solid_mask is not None) and self.solid_mask.any():
             self.u[:, self.solid_mask] = 0.0
 
         # Guo Forcing
-        guo_force = np.zeros_like(self.f)
-        ci = self.c[:, :, None, None]
-        ui = self.u[None, :, :, :]
-        Fi_vec = F[None, :, :, :]
-        ci_dot_u = np.sum(ci * ui, axis=1)
-        term2 = (ci - ui) / self.cs2 + (ci_dot_u[:, None, :, :] * ci) / (self.cs2 ** 2)
-        guo_force = self.weights[:, None, None] * (1 - 0.5 * self.omega) * np.sum(term2 * Fi_vec, axis=1)
+        guo_force = self.compute_guo_forcing(F)
 
         # Compute equilibrium distribution
         self.f_eq = self.compute_equilibrium(self.rho, self.u)
