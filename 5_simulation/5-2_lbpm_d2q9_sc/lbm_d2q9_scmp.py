@@ -277,6 +277,7 @@ class LBM_SCMP:
         term2 = (ci - ui) / self.cs2 + (ci_dot_u[:, None, :, :] * ci) / (self.cs2 ** 2)
         guo_force = self.weights[:, None, None] * (1 - 0.5 * self.omega) * np.sum(term2 * Fi_vec, axis=1)
         return guo_force
+    
         
 
     def step(self, body_force_override: Iterable[float] = None):
