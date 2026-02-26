@@ -53,7 +53,7 @@ class LBM_SCMP:
         self.f = np.zeros((9, nx, ny), dtype=np.float64)
         self.f_eq = np.zeros((9, nx, ny), dtype=np.float64)
         self.psi = np.empty((nx, ny), dtype=np.float64)
-        self.psi_s = psi_solid  # self.rho_0 * (1 - np.exp(-1.))
+        self.psi_s = psi_solid
 
         self.timestep = 0
         self.solid_mask = np.zeros((nx, ny), dtype=bool)
@@ -255,7 +255,7 @@ class LBM_SCMP:
             F[:, self.solid_mask] = 0.0
 
         return F
-    
+
     def compute_guo_forcing(self, F) -> np.ndarray:
         """
         Compute Guo forcing
@@ -268,7 +268,7 @@ class LBM_SCMP:
         guo_force : ndarray (2, nx, ny)
             Guo forcing term
         """
-        
+
         guo_force = np.zeros_like(self.f, dtype=np.float64)
         ci = self.c[:, :, None, None]
         ui = self.u[None, :, :, :]
@@ -277,8 +277,8 @@ class LBM_SCMP:
         term2 = (ci - ui) / self.cs2 + (ci_dot_u[:, None, :, :] * ci) / (self.cs2 ** 2)
         guo_force = self.weights[:, None, None] * (1 - 0.5 * self.omega) * np.sum(term2 * Fi_vec, axis=1)
         return guo_force
-    
-        
+
+
 
     def step(self, body_force_override: Iterable[float] = None):
         """
@@ -287,7 +287,7 @@ class LBM_SCMP:
         ---
         body_force_override: Iterable[float], optional
             If provided, use this body force instead of the one provided in the constructor. Should be a 2-element iterable for (Fx, Fy).
-        
+
         Returns:
         ---
         None
