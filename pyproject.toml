@@ -15,9 +15,9 @@ requires-python = ">=3.9"
 
 dependencies = [
     "numpy",
-    "matplotlib"
-    "scikit-img"
-    "plotly"
+    "matplotlib",
+    "scikit-image",
+    "plotly",
     "requests",
     "tifffile",
     "pandas",
@@ -25,12 +25,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-chapter1 = [medpy]
-chapter2 = [medpy]
-chapter3 = [pyvista[all], porespy, trimesh, cc3d]
-chapter4 = [pyvista[all]]
-chapter5 = [openpnm, porespy]
+chapter1 = ["medpy"]
+chapter2 = ["medpy"]
+chapter3 = ["pyvista[all]", "porespy", "trimesh", "connected-components-3d", "networkx", "edt"]
+chapter4 = ["pyvista[all]"]
+chapter5 = ["openpnm", "porespy"]
 chapter6 = ["torch"]
+all = ["medpy", "pyvista[all]", "porespy", "trimesh", "connected-components-3d", "networkx", "edt", "openpnm", "torch"]
 
 [tool.setuptools.packages.find]
 where = ["."]

@@ -23,9 +23,13 @@ class DPMDataloader:
         sample_path = self.cache_dir / f"{sample}.tif"
 
         if not sample_path.exists():
+            # Resolve the {dataset_id}/{version} template in the URL, so bumping
+            # a dataset's published version only requires editing registry.json.
+            sample_url = sample_info["url"].format(
+                dataset_id=sample_info["dataset_id"], version=sample_info["version"]
+            )
             # Download the sample file from the provided URL
-            print(f"Downloading sample '{sample}' from {sample_info['url']}")
-            sample_url = sample_info["url"]
+            print(f"Downloading sample '{sample}' from {sample_url}")
             response = requests.get(sample_url, stream=True)
             with open(sample_path, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=1024):
